@@ -1,0 +1,34 @@
+---
+import type Article from "../interfaces/articles";
+import fetchApi from "../lib/strapi";
+
+const articles = await fetchApi<Article[]>({
+  endpoint: "articles?populate=image",
+  wrappedByKey: "data",
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Strapi & Astro</title>
+  </head>
+
+  <body>
+    <main>
+      <ul>
+        {
+          articles ? (
+            articles.map((article: Article) => (
+              <a href={`/blog/${article.attributes.slug}/`}>
+                {article.attributes.title}
+              </a>
+            ))
+          ) : (
+            <h1>No Posts Found</h1>
+          )
+        }
+      </ul>
+    </main>
+  </body>
+</html>
